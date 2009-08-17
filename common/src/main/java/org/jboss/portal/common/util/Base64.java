@@ -34,7 +34,6 @@ package org.jboss.portal.common.util;
  * <p>Based on version 2.1 of the Base64 class developed by Robert Harder (public domain).
  * Please visit <a href="http://iharder.net/base64">http://iharder.net/base64</a>
  * periodically to check for updates or to contribute improvements.
- * </p>
  *
  * @author <a href="mailto:rob@iharder.net">Robert Harder</a>
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -553,82 +552,4 @@ public class Base64
       return decode(s, EncodingOption.STANDARD);
    }   // end decode
 
-   // Deprecated methods
-   
-   /**
-    * Encodes a byte array into Base64 notation using the standard Base64 encoding.
-    *
-    * @deprecated
-    * @param source The data to convert
-    * @param useURLSafeEncoding <code>true</code> to use '-', '_' instead of '+', '/' in the alphabet and '*' instead
-    *                           of '=' for padding to generate a URL-safe encoding. <i>Note: Technically, this makes
-    *                           your encoding non-compliant.</i>
-    */
-   public static String encodeBytes(byte[] source, boolean useURLSafeEncoding)
-   {
-      if (useURLSafeEncoding)
-      {
-         return encodeBytes(source, EncodingOption.USEURLSAFEENCODING);
-      }
-      else
-      {
-         return encodeBytes(source, EncodingOption.STANDARD);
-      }
-   }   // end encodeBytes
-
-   /**
-    * Encodes a byte array into Base64 notation.
-    *
-    * @deprecated
-    * @param source             The data to convert
-    * @param off                Offset in array where conversion should begin
-    * @param len                Length of data to convert
-    * @param useURLSafeEncoding <code>true</code> to use '-', '_' instead of '+', '/' in the alphabet and '*' instead
-    *                           of '=' for padding to generate a URL-safe encoding. <i>Note: Technically, this makes
-    *                           your encoding non-compliant.</i>
-    */
-   public static String encodeBytes(byte[] source, int off, int len, boolean useURLSafeEncoding)
-   {
-      return (useURLSafeEncoding) ? encodeBytes(source, off, len, EncodingOption.USEURLSAFEENCODING) : encodeBytes(source, off, len, EncodingOption.STANDARD);
-   }
-   
-   /**
-    * Very low-level access to decoding ASCII characters in
-    * the form of a byte array.
-    *
-    * @deprecated
-    * @param source                 The Base64 encoded data
-    * @param off                    The offset of where to begin decoding
-    * @param len                    The length of characters to decode
-    * @param urlSafeEncodingWasUsed <code>true</code> if the URL-safe was used to encode the data to be decoded
-    * @return decoded data
-    */
-   public static byte[] decode(byte[] source, int off, int len, boolean urlSafeEncodingWasUsed)
-   {
-      EncodingOption option = EncodingOption.STANDARD;
-      if (urlSafeEncodingWasUsed)
-      {
-         option = EncodingOption.USEURLSAFEENCODING;
-      }
-      return decode(source, off, len, option);
-   }   // end decode
-
-   /**
-    * Decodes data from Base64 notation
-    *
-    * @deprecated
-    * @param s                      the string to decode
-    * @param urlSafeEncodingWasUsed <code>true</code> if the URL-safe was used to encode the data to be decoded
-    * @return the decoded data
-    */
-   public static byte[] decode(String s, boolean urlSafeEncodingWasUsed)
-   {
-      EncodingOption option = EncodingOption.STANDARD;
-      if (urlSafeEncodingWasUsed)
-      {
-         option = EncodingOption.USEURLSAFEENCODING;
-      }
-      return decode(s, option);
-   }   // end decode
-   
 }   // end class Base64
