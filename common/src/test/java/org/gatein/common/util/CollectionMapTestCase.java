@@ -221,7 +221,7 @@ public class CollectionMapTestCase extends TestCase
       }
       try
       {
-         map.remove(null, v1);
+         map.remove((Key)null, v1);
          fail();
       }
       catch (NullPointerException expected)
