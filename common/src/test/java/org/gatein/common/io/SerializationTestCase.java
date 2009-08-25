@@ -24,7 +24,7 @@ package org.gatein.common.io;
 
 import org.gatein.common.io.Serialization;
 import org.gatein.common.io.IOTools;
-import org.gatein.common.junit.ExtendedAssert;
+import org.gatein.common.ExtendedAssert;
 import org.gatein.common.util.MapBuilder;
 
 import java.util.Map;

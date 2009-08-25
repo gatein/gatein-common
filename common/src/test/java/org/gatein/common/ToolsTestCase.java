@@ -24,7 +24,7 @@
 package org.gatein.common;
 
 import junit.framework.TestCase;
-import org.gatein.common.junit.ExtendedAssert;
+import org.gatein.common.ExtendedAssert;
 import org.gatein.common.util.Tools;
 
 import java.util.ArrayList;

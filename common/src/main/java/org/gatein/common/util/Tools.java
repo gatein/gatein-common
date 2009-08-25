@@ -24,7 +24,6 @@ package org.gatein.common.util;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.gatein.common.logging.Log4JWriter;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -748,18 +747,6 @@ public class Tools
       }
       pw.print("</classloader-dump>");
       pw.flush();
-   }
-
-   public static void dumpClassLoaderHierarchyInfo(Logger log, ClassLoader loader)
-   {
-      Writer writer = new Log4JWriter(log, Level.DEBUG);
-      dumpClassLoaderHierarchyInfo(writer, loader);
-   }
-
-   public static void dumpClassLoaderHierarchyInfo(Logger log, Level level, ClassLoader loader)
-   {
-      Writer writer = new Log4JWriter(log, level);
-      dumpClassLoaderHierarchyInfo(writer, loader);
    }
 
    /**
