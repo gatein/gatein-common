@@ -4,7 +4,7 @@
    <groupId>org.gatein.common</groupId>
    <artifactId>module-aggregator</artifactId>
    <packaging>pom</packaging>
-   <name>JBoss Portal Modules Common (aggregator)</name>
+   <name>GateIn Modules Common (aggregator)</name>
    <version>3.0.0-SNAPSHOT</version>
 
    <distributionManagement>
