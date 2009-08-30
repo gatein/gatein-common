@@ -863,7 +863,7 @@ public class Tools
     * the boundaries (prefix and suffix) after the substitution by setting <code>keepBoundaries</code> to
     * <code>true</code>.
     * <p/>
-    * See org.jboss.portal.test.common.StringTestCase.testReplaceBoundedString() for usage details.
+    * See org.gatein.common.StringTestCase.testReplaceBoundedString() for usage details.
     *
     * @param initial                     the String in which we want to replace bounded Strings
     * @param prefix                      the prefix used identify the beginning of the String targeted for replacement

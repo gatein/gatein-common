@@ -9,8 +9,8 @@
    <groupId>org.gatein.common</groupId>
    <artifactId>module-parent</artifactId>
    <packaging>pom</packaging>
-   <name>JBoss Portal Modules Common</name>
-   <version>3.0.0-SNAPSHOT</version>
+   <name>GateIn - Common component (parent)</name>
+   <version>2.0.0-SNAPSHOT</version>
    <url>http://labs.jboss.com/jbossportal</url>
 
    <properties>
@@ -22,6 +22,7 @@
       <version.apache.commons-httpclient>3.0.1</version.apache.commons-httpclient>
       <version.jboss.microcontainer>2.0.2.GA</version.jboss.microcontainer>
       <version.jboss.man>2.0.0.GA</version.jboss.man>
+      <version.jboss.vfs>2.1.0.GA</version.jboss.vfs>
       <version.cargo>0.8</version.cargo>
       <version.junit>3.8.1</version.junit>
       <version.ant>1.7.0</version.ant>
@@ -89,6 +90,12 @@
             <groupId>jboss</groupId>
             <artifactId>jboss-jmx</artifactId>
             <version>${version.jboss-jmx}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-vfs</artifactId>
+            <version>${version.jboss.vfs}</version>
          </dependency>
 
          <dependency>
