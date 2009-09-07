@@ -1,0 +1,82 @@
+this is some plain text
+<table><tr><td>I love to write entities like < or > to see how the renderer interprets that
+check the line break around this line
+here we check the wellformdness of the HTML stuff because we enter a code section
+which must terminates any open HTML tag
+[b]bold[/b]
+[i]italic[/i]
+
+the next line is a quote of myself which contains code
+[quote=julien]
+[code]
+this is an XML sample, so the great than etc... should be displayed instead of
+being treated as entities
+<?xml version="1.0"?>
+[b]<root>[/b] the root element is bold
+</root>
+[/code]
+
+the code is closed, we are going to test the nested quotes
+[quote]
+this is a nested quote
+[/quote]
+the next line is code that contains no breaks
+[code]public static void[/code]
+[/quote]
+
+next one is a quote with no line break
+[quote]quote with no line break[/quote]
+
+
+we are going to test if the renderer closes the unclosed statements
+[b][i][u]bold, italic, underline[/b]
+
+[url]http://www.test.com[/url]
+
+[list]
+[*]first item
+[/list]
+
+[list]
+[*]first item
+[*]second item
+[/list]
+
+[list=1]
+[*]first item
+[*]second item
+[/list]
+
+[list=a]
+[*]first item
+[*]second item
+[/list]
+
+[size=25][color=#FF0000]big red[/color][/size]
+
+<code><pre>
+a
+ a
+  a
+   a
+</pre></code>
+<code>
+a
+ a
+  a
+   a
+</code>
+<pre>
+a
+ a
+  a
+   a
+</pre>
+[code]
+a
+ a
+  a
+   a
+[/code]
+
+this is the end of the message
