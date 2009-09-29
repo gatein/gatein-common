@@ -2,9 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <parent>
       <groupId>org.gatein.common</groupId>
-      <artifactId>module-parent</artifactId>
+      <artifactId>common-parent</artifactId>
       <version>trunk-SNAPSHOT</version>
-      <relativePath>../build/pom.xml</relativePath>
    </parent>
    <modelVersion>4.0.0</modelVersion>
    <artifactId>common-common</artifactId>

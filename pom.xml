@@ -1,45 +1,76 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   <modelVersion>4.0.0</modelVersion>
-   <groupId>org.gatein.common</groupId>
-   <artifactId>module-aggregator</artifactId>
-   <packaging>pom</packaging>
-   <name>GateIn - Common component (aggregator)</name>
-   <version>trunk-SNAPSHOT</version>
+  
+  <modelVersion>4.0.0</modelVersion>
+  
+  <name>GateIn - Common component</name>
+  
+  <groupId>org.gatein.common</groupId>
+  <artifactId>common-parent</artifactId>
+  <version>trunk-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
+  <parent>
+    <groupId>org.gatein</groupId>
+    <artifactId>gatein-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  
+  <scm>
+    <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/components/common/trunk/</connection>
+    <developerConnection>scm:svn:https://svn.jboss.org/repos/gatein/components/common/trunk/</developerConnection>
+    <url>http://fisheye.jboss.org/browse/gatein/components/common/trunk/</url>
+  </scm>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 
-   <distributionManagement>
-      <repository>
-         <!--Copy the distribution jar file to a local checkout of the maven repository
-       -  This variable can be set in $MAVEN_HOME/conf/settings.xml-->
-         <id>repository.jboss.org</id>
-         <url>file://${jboss.repository.root}</url>
-      </repository>
-      <snapshotRepository>
-         <id>snapshots.jboss.org</id>
-         <name>JBoss Snapshot Repository</name>
-         <url>dav:https://snapshots.jboss.org/maven2</url>
-         <uniqueVersion>true</uniqueVersion>
-      </snapshotRepository>
-   </distributionManagement>
-
-   <modules>
-      <module>build</module>
-      <module>common</module>
-      <module>mc</module>
-   </modules>
-
-   <reporting>
-      <plugins>
-         <plugin>
-           <groupId>org.apache.maven.plugins</groupId>
-           <artifactId>maven-javadoc-plugin</artifactId>
-           <configuration>
-              <aggregate>true</aggregate>
-           </configuration>
-         </plugin>
-      </plugins>
-  </reporting>
-
-
+  <!-- Import dependency management configuration -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.gatein</groupId>
+        <artifactId>gatein-dep</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+   
+  <repositories>
+    <repository>
+      <id>repository.jboss.org</id>
+      <name>JBoss Repository</name>
+      <layout>default</layout>
+      <url>http://repository.jboss.org/maven2/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>snapshots.jboss.org</id>
+      <name>JBoss Snapshots Repository</name>
+      <layout>default</layout>
+      <url>http://snapshots.jboss.org/maven2/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
+  
+  <modules>
+    <module>common</module>
+    <module>mc</module>
+  </modules>
 
 </project>
