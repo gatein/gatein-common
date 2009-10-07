@@ -23,14 +23,6 @@
     <url>http://fisheye.jboss.org/browse/gatein/components/common/trunk/</url>
   </scm>
   
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-source-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </build>
-
   <!-- Import dependency management configuration -->
   <dependencyManagement>
     <dependencies>
