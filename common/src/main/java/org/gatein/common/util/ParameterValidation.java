@@ -25,7 +25,9 @@ package org.gatein.common.util;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -164,6 +166,16 @@ public class ParameterValidation
       {
          throw new IllegalArgumentException("Must pass a non-empty " + name);
       }
+   }
+
+   public static boolean existsAndIsNotEmpty(Collection collection)
+   {
+      return collection != null && !collection.isEmpty();
+   }
+
+   public static boolean existsAndIsNotEmpty(Map map)
+   {
+      return map != null && !map.isEmpty();
    }
 
    /**
