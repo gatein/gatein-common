@@ -178,6 +178,11 @@ public class ParameterValidation
       return map != null && !map.isEmpty();
    }
 
+   public static <T> boolean existsAndIsNotEmpty(T[] array)
+   {
+      return array != null && array.length > 0;
+   }
+
    /**
     * Checks if a given value matches the given format (as a regular expression). If yes, returns it as is. Otherwise,
     * returns the default value.
