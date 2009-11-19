@@ -22,10 +22,11 @@
  ******************************************************************************/
 package org.gatein.common.net.file;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.net.URLNavigationProvider;
 import org.gatein.common.net.URLVisitor;
 import org.gatein.common.net.URLFilter;
-import org.apache.log4j.Logger;
 
 import java.util.Arrays;
 import java.net.URL;
@@ -41,7 +42,7 @@ public class FileURLNavigationProvider implements URLNavigationProvider
 {
 
    /** The logger. */
-   private Logger log = Logger.getLogger(FileURLNavigationProvider.class);
+   private Logger log = LoggerFactory.getLogger(FileURLNavigationProvider.class);
 
    /** Trace. */
    private boolean trace = log.isDebugEnabled();

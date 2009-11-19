@@ -27,7 +27,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.util.ConversionException;
 
 /**
@@ -44,7 +45,7 @@ public final class LocalizedString
    private static final String[] EMPTY_STRINGS = new String[0];
 
    /** The logger. */
-   private static final Logger log = Logger.getLogger(LocalizedString.class);
+   private static final Logger log = LoggerFactory.getLogger(LocalizedString.class);
 
    /** A unmodifiable map. */
    private final Map<Locale, Value> values;

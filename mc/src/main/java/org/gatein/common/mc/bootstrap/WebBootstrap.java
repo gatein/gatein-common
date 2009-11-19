@@ -30,7 +30,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.apache.log4j.Logger;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.jboss.beans.metadata.spi.BeanMetaData;
 import org.jboss.kernel.plugins.deployment.xml.BeanXMLDeployer;
 import org.jboss.kernel.spi.dependency.KernelControllerContext;
@@ -86,7 +87,7 @@ public class WebBootstrap implements ServletContextListener
    public static final String BEAN_PREFIX = "jboss.portal:service=";
 
    /** . */
-   private final static Logger log = Logger.getLogger(WebBootstrap.class);
+   private final static Logger log = LoggerFactory.getLogger(WebBootstrap.class);
 
    /** . */
    private ServletContext servletContext;

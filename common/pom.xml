@@ -1,86 +1,97 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   <parent>
-      <groupId>org.gatein.common</groupId>
-      <artifactId>common-parent</artifactId>
-      <version>2.0.0-CR1-SNAPSHOT</version>
-   </parent>
-   <modelVersion>4.0.0</modelVersion>
-   <artifactId>common-common</artifactId>
-   <packaging>jar</packaging>
-   <name>GateIn - Common component (common)</name>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>org.gatein.common</groupId>
+		<artifactId>common-parent</artifactId>
+		<version>2.0.0-CR1-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>common-common</artifactId>
+	<packaging>jar</packaging>
+	<name>GateIn - Common component (common)</name>
 
-   <dependencies>
+	<dependencies>
 
-      <dependency>
-         <groupId>apache-log4j</groupId>
-         <artifactId>log4j</artifactId>
-      </dependency>
+		<dependency>
+			<groupId>org.gatein.common</groupId>
+			<artifactId>common-logging</artifactId>
+			<version>2.0.0-CR1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.5.6</version>
+			<scope>test</scope>
+		</dependency>
 
-      <dependency>
-         <groupId>javax.activation</groupId>
-         <artifactId>activation</artifactId>
-      </dependency>
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+		</dependency>
 
-      <dependency>
-         <groupId>org.jboss</groupId>
-         <artifactId>jboss-vfs</artifactId>
-      </dependency>
+		<dependency>
+			<groupId>org.jboss</groupId>
+			<artifactId>jboss-vfs</artifactId>
+		</dependency>
 
-      <dependency>
-         <groupId>commons-httpclient</groupId>
-         <artifactId>commons-httpclient</artifactId>
-      </dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+		</dependency>
 
-      <dependency>
-         <groupId>javax.servlet</groupId>
-         <artifactId>servlet-api</artifactId>
-      </dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+		</dependency>
 
-      <dependency>
-         <groupId>junit</groupId>
-         <artifactId>junit</artifactId>
-         <scope>test</scope>
-      </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-   </dependencies>
+	</dependencies>
 
-   <build>
-      <plugins>
+	<build>
+		<plugins>
 
-         <plugin>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-               <encoding>iso-8859-1</encoding>
-            </configuration>
-         </plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<encoding>iso-8859-1</encoding>
+				</configuration>
+			</plugin>
 
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-               <!-- To use in conjonctin with
-              export MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000"               
-                  -->
-               <forkMode>never</forkMode>
-               <argLine>-enableassertions</argLine>
-               <excludes>
-                  <exclude>org/gatein/common/i18n/BundleNameParserTestCase*.java</exclude>
-                  <exclude>org/gatein/common/net/URLNavigatorTestCase.java</exclude>
-               </excludes>
-            </configuration>
-         </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!--
+						To use in conjonctin with export MAVEN_OPTS="-Xdebug -Xnoagent
+						-Djava.compiler=NONE
+						-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000"
+					-->
+					<forkMode>never</forkMode>
+					<argLine>-enableassertions</argLine>
+					<excludes>
+						<exclude>org/gatein/common/i18n/BundleNameParserTestCase*.java</exclude>
+						<exclude>org/gatein/common/net/URLNavigatorTestCase.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
 
-      </plugins>
+		</plugins>
 
-      <testSourceDirectory>src/test/java</testSourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
 
-      <testResources>
-         <testResource>
-            <directory>src/test/resources</directory>
-            <filtering>false</filtering>
-         </testResource>
-      </testResources>
-   </build>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>false</filtering>
+			</testResource>
+		</testResources>
+	</build>
 
-   <properties />
+	<properties />
 </project>

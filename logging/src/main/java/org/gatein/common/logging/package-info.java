@@ -6,4 +6,4 @@
  * is already a facade for various logging framework, the goal of this facade is to decouple the GateIn project
  * from a system considered as proprietary although under an open source license.</p>
  */
-package org.gatein.common.logger;
+package org.gatein.common.logging;

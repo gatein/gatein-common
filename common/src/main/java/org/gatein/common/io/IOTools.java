@@ -22,8 +22,9 @@
  ******************************************************************************/
 package org.gatein.common.io;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.util.Tools;
-import org.apache.log4j.Logger;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -53,7 +54,7 @@ public class IOTools
 {
 
    /** The logger. */
-   public static final Logger log = Logger.getLogger(IOTools.class);
+   public static final Logger log = LoggerFactory.getLogger(IOTools.class);
 
    /** . */
    private static final Object[] EMPTY_ARGS = new Object[0];

@@ -22,8 +22,9 @@
  ******************************************************************************/
 package org.gatein.common.net;
 
-import org.apache.log4j.Logger;
 import org.gatein.common.ExtendedAssert;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -42,7 +43,7 @@ public abstract class AbstractSynchronizedServer extends AbstractServer
 {
 
    /** . */
-   private static final Logger log = Logger.getLogger(AbstractSynchronizedServer.class);
+   private static final Logger log = LoggerFactory.getLogger(AbstractSynchronizedServer.class);
 
    /** . */
    private final Object lock = new Object();

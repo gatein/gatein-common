@@ -22,7 +22,8 @@
  ******************************************************************************/
 package org.gatein.common.http;
 
-import org.apache.log4j.Logger;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.text.CharBuffer;
 import org.gatein.common.text.CharEncoder;
 import org.gatein.common.text.EncodingException;
@@ -47,7 +48,7 @@ public class QueryStringParser
    }
 
    /** . */
-   private static final Logger log = Logger.getLogger(QueryStringParser.class);
+   private static final Logger log = LoggerFactory.getLogger(QueryStringParser.class);
 
    /** . */
    private static final int LOOKUP = 0;

@@ -30,23 +30,23 @@ package org.gatein.common;
  */
 public class NotYetImplemented extends UnsupportedOperationException
 {
-   /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7085502234608134040L;
 
-public NotYetImplemented()
-   {
-      super("Not yet implemented");
-   }
+	public NotYetImplemented()
+	{
+		super("Not yet implemented");
+	}
 
-   /**
-    * Constructor that takes a feature name for formatting the message.
-    *
-    * @param featureName the feature name that is not implemented
-    */
-   public NotYetImplemented(String featureName)
-   {
-      super("Feature: " + featureName + " is not yet implemented");
-   }
+	/**
+	 * Constructor that takes a feature name for formatting the message.
+	 *
+	 * @param featureName the feature name that is not implemented
+	 */
+	public NotYetImplemented(String featureName)
+	{
+		super("Feature: " + featureName + " is not yet implemented");
+	}
 }

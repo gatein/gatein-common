@@ -23,8 +23,9 @@
 package org.gatein.common.net;
 
 import junit.framework.TestCase;
-import org.apache.log4j.Logger;
 import org.gatein.common.ExtendedAssert;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.net.URLTools;
 
 import java.net.MalformedURLException;
@@ -39,7 +40,7 @@ public class URLToolsTestCase extends TestCase
 {
 
    /** . */
-   private static final Logger log = Logger.getLogger(URLToolsTestCase.class);
+   private static final Logger log = LoggerFactory.getLogger(URLToolsTestCase.class);
 
    private static final String MARKUP = "Hello, Anonymous!\n" +
       "Counter: 0<a href='wsrp_rewrite?wsrp-urlType=render&amp;wsrp-navigationalState=rO0ABXNyACdvcmc" +

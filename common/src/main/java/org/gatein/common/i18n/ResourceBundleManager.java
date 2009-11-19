@@ -22,8 +22,6 @@
  ******************************************************************************/
 package org.gatein.common.i18n;
 
-import org.apache.log4j.Logger;
-
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -31,6 +29,9 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * <p>Manage a set of resource bundles. Obtention of bundles is delegated to a ResourceBundleFactory. A bundle
@@ -46,7 +47,7 @@ public class ResourceBundleManager
 {
 
    /** . */
-   private final Logger log = Logger.getLogger(getClass());
+   private final Logger log = LoggerFactory.getLogger(getClass());
 
    /** . */
    private final ConcurrentMap<Locale, BundleRef> localeBundles;

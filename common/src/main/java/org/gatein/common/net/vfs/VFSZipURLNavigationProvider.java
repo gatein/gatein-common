@@ -27,7 +27,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.apache.log4j.Logger;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.net.URLFilter;
 import org.gatein.common.net.URLNavigationProvider;
 import org.gatein.common.net.URLVisitor;
@@ -42,7 +43,7 @@ public class VFSZipURLNavigationProvider implements URLNavigationProvider
 {
 
    /** The logger. */
-   private Logger log = Logger.getLogger(VFSZipURLNavigationProvider.class);
+   private Logger log = LoggerFactory.getLogger(VFSZipURLNavigationProvider.class);
 
    /** Trace. */
    private boolean trace = log.isDebugEnabled();

@@ -24,8 +24,9 @@ package org.gatein.common.util;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import org.apache.log4j.Logger;
 import org.gatein.common.io.IOTools;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.xml.XMLTools;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -46,7 +47,7 @@ public abstract class LoaderResource
 
    protected final String location;
 
-   private final Logger log = Logger.getLogger(getClass());
+   private final Logger log = LoggerFactory.getLogger(getClass());
 
    public LoaderResource(String location)
    {

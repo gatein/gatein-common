@@ -22,9 +22,6 @@
  ******************************************************************************/
 package org.gatein.common.util;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -47,6 +44,9 @@ import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+
 /**
  * @author <a href="mailto:julien@jboss.org">Julien Viet</a>
  * @author <a href="mailto:theute@jboss.org">Thomas Heute</a>
@@ -60,7 +60,7 @@ public class Tools
 
    public static final int DEFAULT_BUFFER_SIZE = 512;
 
-   public static final Logger log = Logger.getLogger(Tools.class);
+   public static final Logger log = LoggerFactory.getLogger(Tools.class);
 
    /** 16 chars long VMID. */
    public static final String VMID = VMID();

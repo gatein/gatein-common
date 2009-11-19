@@ -22,13 +22,14 @@
  ******************************************************************************/
 package org.gatein.common.util;
 
-import org.apache.log4j.Logger;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -92,7 +93,7 @@ public class ParameterValidation
 
    public static class LoggingValidationErrorHandler extends ValidationErrorHandler
    {
-      private static final Logger log = Logger.getLogger(ParameterValidation.class);
+      private static final Logger log = LoggerFactory.getLogger(ParameterValidation.class);
       private String contextMessage;
 
       public LoggingValidationErrorHandler(String defaultValue, String contextMessage)

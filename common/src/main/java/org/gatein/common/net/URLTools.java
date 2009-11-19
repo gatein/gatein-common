@@ -22,8 +22,9 @@
  ******************************************************************************/
 package org.gatein.common.net;
 
-import org.apache.log4j.Logger;
 import org.gatein.common.io.IOTools;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.text.FastURLDecoder;
 import org.gatein.common.text.FastURLEncoder;
 import org.gatein.common.util.ParameterValidation;
@@ -58,7 +59,7 @@ public class URLTools
    public static final String FTP_PREFIX = "ftp://";
    public static final String FILE_PREFIX = "/";
 
-   private static final Logger log = Logger.getLogger(URLTools.class);
+   private static final Logger log = LoggerFactory.getLogger(URLTools.class);
 
    public static boolean isURLAbsolute(String url)
    {
