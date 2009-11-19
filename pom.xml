@@ -2,7 +2,7 @@
   
   <modelVersion>4.0.0</modelVersion>
   
-  <name>GateIn - Common component</name>
+  <name>GateIn - Common</name>
   
   <groupId>org.gatein.common</groupId>
   <artifactId>common-parent</artifactId>
