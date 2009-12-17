@@ -27,7 +27,6 @@ import org.gatein.common.text.CharWriter;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -40,19 +39,8 @@ import java.util.Map;
 class DefaultLocaleFormat extends AbstractLocaleFormat
 {
 
-   /** . */
-   private static final Map<String, Locale> CACHE = new HashMap<String, Locale>();
-
-   static
-   {
-      for (Iterator<Locale> i = LocaleManager.getLocales().iterator(); i.hasNext();)
-      {
-         Locale locale = (Locale)i.next();
-
-         //
-         CACHE.put(locale.toString(), locale);
-      }
-   }
+   /** A copy on write cache (yeah not volatile, so what?). */
+   private Map<String, Locale> CACHE = new HashMap<String, Locale>();
 
    /** . */
    private LocaleFactory factory;
@@ -69,7 +57,7 @@ class DefaultLocaleFormat extends AbstractLocaleFormat
 
    protected Locale internalGetLocale(String value) throws FormatConversionException
    {
-      Locale locale = (Locale)CACHE.get(value);
+      Locale locale = CACHE.get(value);
       if (locale != null)
       {
          return locale;
@@ -79,38 +67,44 @@ class DefaultLocaleFormat extends AbstractLocaleFormat
       int p1 = value.lastIndexOf('_');
       if (p1 < 0)
       {
-         return factory.createLocale(value);
+         locale = factory.createLocale(value);
       }
-
-      //
-      String a = (p1 == (value.length() - 1)) ? "" : value.substring(p1 + 1, value.length());
-
-      //
-      int p2 = value.lastIndexOf('_', p1 - 1);
-      if (p2 < 0)
+      else
       {
-         if (a.length() == 0)
+         String a = (p1 == (value.length() - 1)) ? "" : value.substring(p1 + 1, value.length());
+         int p2 = value.lastIndexOf('_', p1 - 1);
+         if (p2 < 0)
          {
-            throw new FormatConversionException();
+            if (a.length() == 0)
+            {
+               throw new FormatConversionException();
+            }
+            else
+            {
+               locale = factory.createLocale(value.substring(0, p1), a);
+            }
          }
          else
          {
-            return factory.createLocale(value.substring(0, p1), a);
+            boolean emptyLanguage = p2 == p1 - 1;
+            if (p2 == 0 && emptyLanguage)
+            {
+               throw new FormatConversionException();
+            }
+
+            //
+            String b = emptyLanguage ? "" : value.substring(p2 + 1, p1);
+            locale = factory.createLocale(value.substring(0, p2), b, a);
          }
       }
 
       //
-      boolean emptyLanguage = p2 == p1 - 1;
-      if (p2 == 0 && emptyLanguage)
-      {
-         throw new FormatConversionException();
-      }
+      Map<String, Locale> copy = new HashMap<String, Locale>(CACHE);
+      copy.put(locale.toString(), locale);
+      CACHE = copy;
 
       //
-      String b = emptyLanguage ? "" : value.substring(p2 + 1, p1);
-
-      //
-      return factory.createLocale(value.substring(0, p2), b, a);
+      return locale;
    }
 
    protected void internalWrite(Locale locale, CharWriter writer) throws IOException
