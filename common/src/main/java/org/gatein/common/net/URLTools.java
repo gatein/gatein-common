@@ -29,6 +29,7 @@ import org.gatein.common.text.FastURLDecoder;
 import org.gatein.common.text.FastURLEncoder;
 import org.gatein.common.util.ParameterValidation;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,11 +60,30 @@ public class URLTools
    public static final String FTP_PREFIX = "ftp://";
    public static final String FILE_PREFIX = "/";
 
+   public static final String SCH_END = "://";
+   public static final String PORT_END = ":";
+   public static final String SLASH = "/";
+
    private static final Logger log = LoggerFactory.getLogger(URLTools.class);
 
    public static boolean isURLAbsolute(String url)
    {
       return isNetworkURL(url) || url.startsWith(FILE_PREFIX);
+   }
+
+   /**
+    * Returns the server address that originated the request, without final /.
+    *
+    * @param request
+    * @return
+    */
+   public static String getServerAddressFrom(HttpServletRequest request)
+   {
+      String scheme = request.getScheme();
+      String host = request.getServerName();
+      int port = request.getServerPort();
+
+      return scheme + SCH_END + host + PORT_END + port;
    }
 
    /**
@@ -470,23 +490,23 @@ public class URLTools
 
    public static String safeEncodeForHTMLId(String value)
    {
-      value = value.replace("=", EQUALS);
-      value = value.replace("/", SLASH);
-      value = value.replace(".", DOT);
-      return value.replace("+", PLUS);
+      value = value.replace("=", EQUALS_REPLACEMENT);
+      value = value.replace("/", SLASH_REPLACEMENT);
+      value = value.replace(".", DOT_REPLACEMENT);
+      return value.replace("+", PLUS_REPLACEMENT);
    }
 
    public static String safeDecodeForHTMLId(String value)
    {
-      value = value.replace(EQUALS, "=");
-      value = value.replace(SLASH, "/");
-      value = value.replace(DOT, ".");
-      return value.replace(PLUS, "+");
+      value = value.replace(EQUALS_REPLACEMENT, "=");
+      value = value.replace(SLASH_REPLACEMENT, "/");
+      value = value.replace(DOT_REPLACEMENT, ".");
+      return value.replace(PLUS_REPLACEMENT, "+");
    }
 
-   private static final String EQUALS = "_e";
-   private static final String SLASH = "_s";
-   private static final String DOT = "_d";
-   private static final String PLUS = "_p";
+   private static final String EQUALS_REPLACEMENT = "_e";
+   private static final String SLASH_REPLACEMENT = "_s";
+   private static final String DOT_REPLACEMENT = "_d";
+   private static final String PLUS_REPLACEMENT = "_p";
 
 }
