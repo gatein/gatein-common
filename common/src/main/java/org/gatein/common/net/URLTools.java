@@ -86,6 +86,31 @@ public class URLTools
       return scheme + SCH_END + host + PORT_END + port;
    }
 
+   public static String getFileExtensionOrNullFrom(URL url)
+   {
+      if (url == null)
+      {
+         return null;
+      }
+
+      String file = url.getPath();
+      if (file == null)
+      {
+         return null;
+      }
+
+      int periodIndex = file.indexOf('.');
+      if (periodIndex != -1)
+      {
+         String extension = file.substring(periodIndex + 1);
+         return extension.length() > 0 ? extension : null;
+      }
+      else
+      {
+         return null;
+      }
+   }
+
    /**
     * Fetches content from of the URL as a byte array or <code>null</code> if a problem occurred. The timeout values
     * must not be negative integers, when it is equals to zero it means that it does not setup a timeout and use the

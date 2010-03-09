@@ -26,7 +26,6 @@ import junit.framework.TestCase;
 import org.gatein.common.ExtendedAssert;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.common.net.URLTools;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -270,5 +269,22 @@ public class URLToolsTestCase extends TestCase
 
       //
       server.performInteraction();
+   }
+
+   public void testGetFileExtensionOrNullFrom() throws MalformedURLException
+   {
+      assertNull(URLTools.getFileExtensionOrNullFrom(null));
+
+      URL url = new URL("http://localhost:8080");
+      assertNull(URLTools.getFileExtensionOrNullFrom(url));
+
+      url = new URL("http://localhost:8080/portal");
+      assertNull(URLTools.getFileExtensionOrNullFrom(url));
+
+      url = new URL("http://localhost:8080/portal/file.txt");
+      assertEquals("txt", URLTools.getFileExtensionOrNullFrom(url));
+
+      url = new URL("http://localhost:8080/portal/file.");
+      assertNull(URLTools.getFileExtensionOrNullFrom(url));
    }
 }
