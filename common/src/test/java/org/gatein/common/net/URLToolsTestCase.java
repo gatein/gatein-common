@@ -286,5 +286,11 @@ public class URLToolsTestCase extends TestCase
 
       url = new URL("http://localhost:8080/portal/file.");
       assertNull(URLTools.getFileExtensionOrNullFrom(url));
+
+      url = new URL("http://localhost:8080/portal/file.txt?blah");
+      assertEquals("txt", URLTools.getFileExtensionOrNullFrom(url));
+
+      url = new URL("http://localhost:8080/portal/file.txt.xml?blah");
+      assertEquals("xml", URLTools.getFileExtensionOrNullFrom(url));
    }
 }

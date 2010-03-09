@@ -99,7 +99,7 @@ public class URLTools
          return null;
       }
 
-      int periodIndex = file.indexOf('.');
+      int periodIndex = file.lastIndexOf('.');
       if (periodIndex != -1)
       {
          String extension = file.substring(periodIndex + 1);
