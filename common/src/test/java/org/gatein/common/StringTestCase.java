@@ -23,7 +23,7 @@
 package org.gatein.common;
 
 import junit.framework.TestCase;
-import org.gatein.common.util.Tools;
+import org.gatein.common.text.TextTools;
 
 /**
  * @author <a href="mailto:julien@jboss.org">Julien Viet</a>
@@ -39,22 +39,22 @@ public class StringTestCase extends TestCase
 
    public void testReplace()
    {
-      assertEquals("", Tools.replace("", "abc", "def"));
-      assertEquals("defg", Tools.replace("abc", "abc", "defg"));
-      assertEquals("_defg_", Tools.replace("_abc_", "abc", "defg"));
-      assertEquals("_defgdefg_", Tools.replace("_abcabc_", "abc", "defg"));
-      assertEquals("_defg_defg_", Tools.replace("_abc_abc_", "abc", "defg"));
+      assertEquals("", TextTools.replace("", "abc", "def"));
+      assertEquals("defg", TextTools.replace("abc", "abc", "defg"));
+      assertEquals("_defg_", TextTools.replace("_abc_", "abc", "defg"));
+      assertEquals("_defgdefg_", TextTools.replace("_abcabc_", "abc", "defg"));
+      assertEquals("_defg_defg_", TextTools.replace("_abc_abc_", "abc", "defg"));
    }
 
    public void testReplaceBoundedString()
    {
-      assertEquals("", Tools.replaceAllInstancesOfBoundedString("", "PREFIX", "SUFFIX", "REPLACEMENT"));
-      assertEquals("REPLACEMENT", Tools.replaceAllInstancesOfBoundedString("PREFIXSUFFIX", "PREFIX", "SUFFIX", "REPLACEMENT"));
-      assertEquals("PREFIXSUFFIX", Tools.replaceBoundedString("PREFIXSUFFIX", "PREFIX", "SUFFIX", "REPLACEMENT", false, true));
-      assertEquals("PREFIXSUFFIX", Tools.replaceBoundedString("PREFIXSUFFIX", "PREFIX", "SUFFIX", "REPLACEMENT", false, false));
-      assertEquals("aaaaREPLACEMENTccccc", Tools.replaceAllInstancesOfBoundedString("aaaaPREFIXbbbbbSUFFIXccccc", "PREFIX", "SUFFIX", "REPLACEMENT"));
-      assertEquals("aaaPREFIXbbbbSUFF", Tools.replaceAllInstancesOfBoundedString("aaaPREFIXbbbbSUFF", "PREFIX", "SUFFIX", "REPLACEMENT"));
-      assertEquals("aRcccReeeR", Tools.replaceAllInstancesOfBoundedString("aPbbScccPdSeeePS", "P", "S", "R"));
-      assertEquals("PSaPScccReeePS", Tools.replaceBoundedString("PSaPScccPdSeeePS", "P", "S", "R", false, false));
+      assertEquals("", TextTools.replaceAllInstancesOfBoundedString("", "PREFIX", "SUFFIX", "REPLACEMENT"));
+      assertEquals("REPLACEMENT", TextTools.replaceAllInstancesOfBoundedString("PREFIXSUFFIX", "PREFIX", "SUFFIX", "REPLACEMENT"));
+      assertEquals("PREFIXSUFFIX", TextTools.replaceBoundedString("PREFIXSUFFIX", "PREFIX", "SUFFIX", "REPLACEMENT", false, true));
+      assertEquals("PREFIXSUFFIX", TextTools.replaceBoundedString("PREFIXSUFFIX", "PREFIX", "SUFFIX", "REPLACEMENT", false, false));
+      assertEquals("aaaaREPLACEMENTccccc", TextTools.replaceAllInstancesOfBoundedString("aaaaPREFIXbbbbbSUFFIXccccc", "PREFIX", "SUFFIX", "REPLACEMENT"));
+      assertEquals("aaaPREFIXbbbbSUFF", TextTools.replaceAllInstancesOfBoundedString("aaaPREFIXbbbbSUFF", "PREFIX", "SUFFIX", "REPLACEMENT"));
+      assertEquals("aRcccReeeR", TextTools.replaceAllInstancesOfBoundedString("aPbbScccPdSeeePS", "P", "S", "R"));
+      assertEquals("PSaPScccReeePS", TextTools.replaceBoundedString("PSaPScccPdSeeePS", "P", "S", "R", false, false));
    }
 }

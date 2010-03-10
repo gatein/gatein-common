@@ -22,6 +22,9 @@
  ******************************************************************************/
 package org.gatein.common.util;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -43,9 +46,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.Set;
-
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
 
 /**
  * @author <a href="mailto:julien@jboss.org">Julien Viet</a>
@@ -750,30 +750,6 @@ public class Tools
    }
 
    /**
-    * Replace occurence in a string.
-    *
-    * @param string      the source string
-    * @param pattern     the replaced pattern
-    * @param replacement the replacement text
-    * @return the new string
-    */
-   public static String replace(String string, String pattern, String replacement)
-   {
-      StringBuffer buffer = new StringBuffer(string.length());
-      int previous = 0;
-      int current = string.indexOf(pattern);
-      while (current != -1)
-      {
-         buffer.append(string.substring(previous, current));
-         buffer.append(replacement);
-         previous = current + pattern.length();
-         current = string.indexOf(pattern, previous);
-      }
-      buffer.append(string.substring(previous));
-      return buffer.toString();
-   }
-
-   /**
     * Append an object to an array of objects. The original array is not modified. The returned array will be of the
     * same component type of the provided array and its first n elements where n is the size of the provided array will
     * be the elements of the provided array. The last element of the array will be the provided object to append.
@@ -808,11 +784,8 @@ public class Tools
    }
 
    /**
-    * Return true if
-    * <ul>
-    *    <li>o1 is null and o2 is null</li>
-    *    <li>o1 is not null and the invocation of <code>equals(Object o)</code> on o1 wit o2 as argument returns true</li>
-    * </ul>
+    * Return true if <ul> <li>o1 is null and o2 is null</li> <li>o1 is not null and the invocation of
+    * <code>equals(Object o)</code> on o1 wit o2 as argument returns true</li> </ul>
     *
     * @param o1 the first argument
     * @param o2 the second argument
@@ -831,94 +804,14 @@ public class Tools
    }
 
    /**
-    * Same as replaceBoundedString(initial, prefix, suffix, replacement, true, false).
-    *
-    * @param initial
-    * @param prefix
-    * @param suffix
-    * @param replacement
-    * @return
-    */
-   public static String replaceAllInstancesOfBoundedString(String initial, String prefix, String suffix, String replacement)
-   {
-      return replaceBoundedString(initial, prefix, suffix, replacement, true, false);
-   }
-
-   /**
-    * Replace instances of Strings delimited by the given prefix and suffix (hence, bounded) by the specified
-    * replacement String. It is possible to specify whether the substitution will happen only if the delimited String is
-    * non-empty by setting <code>replaceIfBoundedStringEmpty</code> to <code>false</code>. It is also possible to keep
-    * the boundaries (prefix and suffix) after the substitution by setting <code>keepBoundaries</code> to
-    * <code>true</code>.
-    * <p/>
-    * See org.gatein.common.StringTestCase.testReplaceBoundedString() for usage details.
-    *
-    * @param initial                     the String in which we want to replace bounded Strings
-    * @param prefix                      the prefix used identify the beginning of the String targeted for replacement
-    * @param suffix                      the suffix used to identify the end of the String targeted for replacement
-    * @param replacement                 the String to replace the bounded String with
-    * @param replaceIfBoundedStringEmpty <code>true</code> to allow replacement of empty Strings (in essence, insertion
-    *                                    of the replacement String between the prefix and suffix)
-    * @param keepBoundaries              <code>true</code> to keep the prefix and suffix markers in the resulting
-    *                                    String
-    * @return a String where the Strings marked by prefix and suffix have been replaced by replacement
-    */
-   public static String replaceBoundedString(String initial, String prefix, String suffix, String replacement,
-                                             boolean replaceIfBoundedStringEmpty, boolean keepBoundaries)
-   {
-      if (initial == null || initial.length() == 0)
-      {
-         return initial;
-      }
-
-      ParameterValidation.throwIllegalArgExceptionIfNullOrEmpty(prefix, "prefix", "Tools.replaceBoundedString");
-      ParameterValidation.throwIllegalArgExceptionIfNullOrEmpty(suffix, "suffix", "Tools.replaceBoundedString");
-      ParameterValidation.throwIllegalArgExceptionIfNull(replacement, "replacement");
-
-      StringBuffer tmp = new StringBuffer(initial);
-      int prefixIndex = tmp.indexOf(prefix);
-      int suffixLength = suffix.length();
-      int prefixLength = prefix.length();
-
-      while (prefixIndex != -1)
-      {
-         int suffixIndex = tmp.indexOf(suffix, prefixIndex);
-
-         if (suffixIndex != -1)
-         {
-            // we don't care about empty bounded strings or prefix and suffix don't delimit an empty String => replace!
-            if (replaceIfBoundedStringEmpty || suffixIndex != prefixIndex + prefixLength)
-            {
-               if (keepBoundaries)
-               {
-                  tmp.delete(prefixIndex + prefixLength, suffixIndex);
-                  tmp.insert(prefixIndex + prefixLength, replacement);
-               }
-               else
-               {
-                  tmp.delete(prefixIndex, suffixIndex + suffixLength);
-                  tmp.insert(prefixIndex, replacement);
-               }
-            }
-         }
-
-         prefixIndex = tmp.indexOf(prefix, prefixIndex + prefixLength);
-      }
-
-      return tmp.toString();
-   }
-
-   /**
     * Determines if value is contained in array.
     * <p/>
     * todo: correct this method contract in order to make it more reusable, it looks like for now like a method which
     * has a contract convenient only for some kind of callers.
     * <p/>
-    * <ol>
-    * <li>null value should be accepted (or the method should be called isContainedInButNotForNullValue ?)</li>
+    * <ol> <li>null value should be accepted (or the method should be called isContainedInButNotForNullValue ?)</li>
     * <li>null array should not be accepted (or the method should be called isContainedInExceptIfThePassedArrayIsNull
-    * ?)</li>
-    * </ol>
+    * ?)</li> </ol>
     *
     * @param value
     * @param array
