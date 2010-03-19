@@ -31,6 +31,10 @@ import org.gatein.common.text.TextTools;
  */
 public class StringTestCase extends TestCase
 {
+   private static final String REPLACEMENT = "REPLACEMENT";
+   private static final String PREFIX = "PREFIX";
+   private static final String SUFFIX = "SUF";
+   private static final TestStringReplacementGenerator DEF_GEN = new TestStringReplacementGenerator(REPLACEMENT);
 
    public StringTestCase(String name)
    {
@@ -46,15 +50,102 @@ public class StringTestCase extends TestCase
       assertEquals("_defg_defg_", TextTools.replace("_abc_abc_", "abc", "defg"));
    }
 
+   public void testReplaceAllInstancesOfBoundedString()
+   {
+      assertEquals("", TextTools.replaceAllInstancesOfBoundedString("", PREFIX, SUFFIX, REPLACEMENT));
+      assertEquals("", TextTools.replaceAllInstancesOfBoundedString("", PREFIX, "", REPLACEMENT));
+      assertEquals("", TextTools.replaceAllInstancesOfBoundedString("", "", "", REPLACEMENT));
+
+      DEF_GEN.setExpectedMatch("");
+      assertEquals(REPLACEMENT, TextTools.replaceAllInstancesOfBoundedString("PREFIXSUF", PREFIX, SUFFIX, DEF_GEN));
+
+      DEF_GEN.setExpectedMatch("bbbbb");
+      assertEquals("aaaaREPLACEMENTccccc", TextTools.replaceAllInstancesOfBoundedString("aaaaPREFIXbbbbbSUFccccc", PREFIX, SUFFIX, DEF_GEN));
+
+      DEF_GEN.setExpectedMatch(null);
+      assertEquals("aaaPREFIXbbbbSUFF", TextTools.replaceAllInstancesOfBoundedString("aaaPREFIXbbbbSUFF", PREFIX, "SUFFI", DEF_GEN));
+      assertEquals("aRcccReeeR", TextTools.replaceAllInstancesOfBoundedString("aPbbScccPdSeeePS", "P", "S", "R"));
+   }
+
    public void testReplaceBoundedString()
    {
-      assertEquals("", TextTools.replaceAllInstancesOfBoundedString("", "PREFIX", "SUFFIX", "REPLACEMENT"));
-      assertEquals("REPLACEMENT", TextTools.replaceAllInstancesOfBoundedString("PREFIXSUFFIX", "PREFIX", "SUFFIX", "REPLACEMENT"));
-      assertEquals("PREFIXSUFFIX", TextTools.replaceBoundedString("PREFIXSUFFIX", "PREFIX", "SUFFIX", "REPLACEMENT", false, true));
-      assertEquals("PREFIXSUFFIX", TextTools.replaceBoundedString("PREFIXSUFFIX", "PREFIX", "SUFFIX", "REPLACEMENT", false, false));
-      assertEquals("aaaaREPLACEMENTccccc", TextTools.replaceAllInstancesOfBoundedString("aaaaPREFIXbbbbbSUFFIXccccc", "PREFIX", "SUFFIX", "REPLACEMENT"));
-      assertEquals("aaaPREFIXbbbbSUFF", TextTools.replaceAllInstancesOfBoundedString("aaaPREFIXbbbbSUFF", "PREFIX", "SUFFIX", "REPLACEMENT"));
-      assertEquals("aRcccReeeR", TextTools.replaceAllInstancesOfBoundedString("aPbbScccPdSeeePS", "P", "S", "R"));
-      assertEquals("PSaPScccReeePS", TextTools.replaceBoundedString("PSaPScccPdSeeePS", "P", "S", "R", false, false));
+      replaceBoundedString(false);
+      replaceBoundedString(true);
+   }
+
+   private void replaceBoundedString(boolean suffixIsOptional)
+   {
+      buildTestWithDefaults(PREFIX + SUFFIX, PREFIX + SUFFIX, false, true, suffixIsOptional, "");
+      buildTestWithDefaults(PREFIX + SUFFIX, PREFIX + SUFFIX, false, false, suffixIsOptional, "");
+      buildTestWithDefaults(REPLACEMENT, PREFIX + SUFFIX, true, false, suffixIsOptional, "");
+      buildTestWithDefaults(PREFIX + REPLACEMENT + SUFFIX, PREFIX + SUFFIX, true, true, suffixIsOptional, "");
+      buildTest(PREFIX + SUFFIX, PREFIX + SUFFIX, "", PREFIX, SUFFIX, false, false, suffixIsOptional, "");
+      buildTest("PSaPScccReeePS", "PSaPScccPdSeeePS", "R", "P", "S", false, false, suffixIsOptional, "d");
+   }
+
+   private void buildTestWithDefaults(String expected, String initial, boolean replaceIfBoundedStringEmpty, boolean keepBoundaries, boolean suffixIsOptional, String... expectedMatches)
+   {
+      buildTest(expected, initial, null, PREFIX, SUFFIX, replaceIfBoundedStringEmpty, keepBoundaries, suffixIsOptional, expectedMatches);
+   }
+
+   private void buildTest(String expected, String initial, String replacement, String prefix, String suffix, boolean replaceIfBoundedStringEmpty, boolean keepBoundaries, boolean suffixIsOptional, String... expectedMatches)
+   {
+      if (replacement == null)
+      {
+         replacement = REPLACEMENT;
+      }
+      TestStringReplacementGenerator gen = new TestStringReplacementGenerator(replacement);
+      gen.setExpectedMatch(expectedMatches);
+
+      assertEquals(expected, TextTools.replaceBoundedString(initial, prefix, suffix, gen, replaceIfBoundedStringEmpty, keepBoundaries, suffixIsOptional));
+   }
+
+   public void testReplaceStringsWithNullSuffix()
+   {
+      replaceStringsWithOptionalSuffix(false, null);
+      replaceStringsWithOptionalSuffix(true, null);
+   }
+
+   private void replaceStringsWithOptionalSuffix(boolean suffixIsOptional, String suffix)
+   {
+      buildTest(REPLACEMENT + "blah", PREFIX + "blah", REPLACEMENT, PREFIX, suffix, false, false, suffixIsOptional, PREFIX);
+      buildTest(PREFIX + REPLACEMENT + "blah", PREFIX + "blah", REPLACEMENT, PREFIX, suffix, false, true, suffixIsOptional, PREFIX);
+      buildTest(REPLACEMENT + "blah", PREFIX + "blah", REPLACEMENT, PREFIX, suffix, true, false, suffixIsOptional, PREFIX);
+      buildTest(REPLACEMENT, PREFIX, REPLACEMENT, PREFIX, suffix, true, false, suffixIsOptional, PREFIX);
+   }
+
+   public void testReplaceStringsWithOptionalSuffix()
+   {
+      replaceStringsWithOptionalSuffix(true, SUFFIX);
+      buildTest(REPLACEMENT + "blah" + REPLACEMENT + "foo", PREFIX + "blah" + PREFIX + "replaced" + SUFFIX + "foo", REPLACEMENT, PREFIX, SUFFIX, false, false, true, PREFIX, "replaced");
+      buildTest(REPLACEMENT + "blah" + PREFIX + REPLACEMENT + SUFFIX + "foo", PREFIX + "blah" + PREFIX + "replaced" + SUFFIX + "foo", REPLACEMENT, PREFIX, SUFFIX, false, true, true, PREFIX, "replaced");
+   }
+
+   static class TestStringReplacementGenerator implements TextTools.StringReplacementGenerator
+   {
+      private String replacement;
+      private String[] expectedMatch;
+      private int invocationCount;
+
+      TestStringReplacementGenerator(String replacement)
+      {
+         this.replacement = replacement;
+      }
+
+      public void setExpectedMatch(String... expectedMatch)
+      {
+         this.expectedMatch = expectedMatch;
+         this.invocationCount = 0;
+      }
+
+      public String getReplacementFor(String match, String prefix, String suffix)
+      {
+         if (expectedMatch == null)
+         {
+            fail("getReplacementFor shouldn't have been called");
+         }
+         assertEquals("'" + expectedMatch[invocationCount++] + "'", "'" + match + "'");
+         return replacement;
+      }
    }
 }
