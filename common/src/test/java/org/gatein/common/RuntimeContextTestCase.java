@@ -38,9 +38,8 @@ public class RuntimeContextTestCase extends TestCase
 
    public void testIsUnknown()
    {
-      System.setProperty(RuntimeContext.GATEIN_RUNTIME_CONTEXT_PROP_NAME, "foo");
-
-      assertTrue(RuntimeContext.getInstance().isRunningInUnknownEnvironment());
+      RuntimeContext instance = new RuntimeContext("foo");
+      assertTrue(instance.isRunningInUnknownEnvironment());
    }
 
    public void testKnownValues()
@@ -52,8 +51,6 @@ public class RuntimeContextTestCase extends TestCase
 
    private void setAndAssert(final String value)
    {
-      System.setProperty(RuntimeContext.GATEIN_RUNTIME_CONTEXT_PROP_NAME, value);
-
       RuntimeContext instance = new RuntimeContext(value);
       assertTrue(instance.isRunningIn(RuntimeContext.RunningEnvironment.valueOf(value)));
    }
