@@ -136,7 +136,7 @@ public class TextTools
     * specify whether the substitution will happen only if the delimited String is non-empty by setting
     * <code>replaceIfBoundedStringEmpty</code> to <code>false</code>. It is also possible to keep the boundaries (prefix
     * and suffix) after the substitution by setting <code>keepBoundaries</code> to <code>true</code>. <br/> Note that it
-    * is possible to specify that the suffix is optional, in which case, the prefix will be passed on to the specified
+    * is possible to specify that the suffix is optional, will be passed as a match on to the specified
     * StringReplacementGenerator and be replaced. <br/> See org.gatein.common.StringTestCase.testReplaceBoundedString()
     * for usage details.
     *
@@ -168,6 +168,7 @@ public class TextTools
       int prefixIndex = tmp.indexOf(prefix);
       final int prefixLength = prefix.length();
       boolean suffixAbsent = suffix == null;
+      int suffixLength = suffixAbsent ? 0 : suffix.length();
 
       // nothing to do if didn't ask for an optional suffix and we have one and it's not present in our string
       if (!suffixIsOptional && suffix != null && tmp.indexOf(suffix) == -1)
@@ -181,17 +182,19 @@ public class TextTools
          int suffixIndex;
          if (suffixAbsent)
          {
+            String match = tmp.substring(prefixIndex + prefixLength);
+
             // replace prefix with replacement
             if (keepBoundaries)
             {
                // just insert replacement for prefix
-               tmp.insert(prefixIndex + prefixLength, generator.getReplacementFor(prefix, prefix, suffix));
+               tmp.insert(prefixIndex + prefixLength, generator.getReplacementFor(match, prefix, suffix, true));
             }
             else
             {
                // delete prefix then insert remplacement instead
                tmp.delete(prefixIndex, prefixIndex + prefixLength);
-               tmp.insert(prefixIndex, generator.getReplacementFor(prefix, prefix, suffix));
+               tmp.insert(prefixIndex, generator.getReplacementFor(match, prefix, suffix, true));
             }
 
             // new lookup starting position
@@ -215,12 +218,20 @@ public class TextTools
                   // if suffix is optional, look for potential next prefix instance that we'd need to replace
                   int nextPrefixIndex = tmp.indexOf(prefix, prefixIndex + prefixLength);
 
+                  // check that we're not matching the suffix, which can happen if they are close one to another as is the case with WSRP
+                  if (nextPrefixIndex >= suffixIndex && nextPrefixIndex <= (suffixIndex + suffixLength))
+                  {
+                     // if that's the case, look for the next one instead
+                     nextPrefixIndex = tmp.indexOf(prefix, suffixIndex + suffixLength);
+                  }
+
                   if (nextPrefixIndex != -1 && nextPrefixIndex <= suffixIndex)
                   {
                      // we've found an in-between prefix, use it as the suffix for the current match
                      // delete prefix then insert remplacement instead
+                     String match = tmp.substring(prefixIndex + prefixLength, nextPrefixIndex);
                      tmp.delete(prefixIndex, prefixIndex + prefixLength);
-                     String replacement = generator.getReplacementFor(prefix, prefix, suffix);
+                     String replacement = generator.getReplacementFor(match, prefix, suffix, true);
                      tmp.insert(prefixIndex, replacement);
 
                      prefixIndex = nextPrefixIndex - prefixLength + replacement.length();
@@ -232,9 +243,15 @@ public class TextTools
                if (replaceIfBoundedStringEmpty || suffixIndex != prefixIndex + prefixLength)
                {
                   String match = tmp.substring(prefixIndex + prefixLength, suffixIndex);
+                  String replacement = generator.getReplacementFor(match, prefix, suffix, false);
+                  int changeInLength = replacement.length() - match.length();
+
+                  // compute the next lookup index from which we will look for the next prefix
+                  int nextLookupIndex = prefixIndex + changeInLength;
+
                   if (keepBoundaries)
                   {
-                     if (suffix != null)
+                     if (!suffixAbsent)
                      {
                         // delete only match
                         tmp.delete(prefixIndex + prefixLength, suffixIndex);
@@ -243,13 +260,12 @@ public class TextTools
                      {
                         // delete nothing
                      }
-                     tmp.insert(prefixIndex + prefixLength, generator.getReplacementFor(match, prefix, suffix));
+                     tmp.insert(prefixIndex + prefixLength, replacement);
+                     nextLookupIndex += prefixLength + suffixLength;
                   }
                   else
                   {
-                     int suffixLength = suffix != null ? suffix.length() : 0;
-
-                     if (suffix != null)
+                     if (!suffixAbsent)
                      {
                         // if we have a suffix, delete everything between start of prefix and end of suffix
                         tmp.delete(prefixIndex, suffixIndex + suffixLength);
@@ -259,12 +275,14 @@ public class TextTools
                         // only delete prefix
                         tmp.delete(prefixIndex, prefixIndex + prefixLength);
                      }
-                     tmp.insert(prefixIndex, generator.getReplacementFor(match, prefix, suffix));
+                     tmp.insert(prefixIndex, replacement);
                   }
+
+                  prefixIndex = nextLookupIndex;
                }
             }
 
-            prefixIndex = tmp.indexOf(prefix, prefixIndex + prefixLength);
+            prefixIndex = tmp.indexOf(prefix, prefixIndex + 1); // +1 to avoid infinite loop on border cases
 
          }
       }
@@ -274,7 +292,7 @@ public class TextTools
 
    public static interface StringReplacementGenerator
    {
-      String getReplacementFor(String match, String prefix, String suffix);
+      String getReplacementFor(String match, String prefix, String suffix, boolean matchedPrefixOnly);
    }
 
    public static class ConstantStringReplacementGenerator implements StringReplacementGenerator
@@ -286,7 +304,7 @@ public class TextTools
          this.replacement = replacement;
       }
 
-      public String getReplacementFor(String match, String prefix, String suffix)
+      public String getReplacementFor(String match, String prefix, String suffix, boolean matchedPrefixOnly)
       {
          return replacement;
       }
