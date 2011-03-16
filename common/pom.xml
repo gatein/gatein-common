@@ -23,24 +23,21 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>javax.activation</groupId>
-			<artifactId>activation</artifactId>
-		</dependency>
-
+      <!--
+      Supposedly, when VFSZipURLNavigationProvider is used, it is in a JBoss AS context... This avoids pulling lots of
+      dependencies for just a class that might not even be used. Ideally, VFSZipURLNavigationProvider should be moved
+      to a JBoss AS specific common module?
+      -->
 		<dependency>
 			<groupId>org.jboss</groupId>
 			<artifactId>jboss-vfs</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
+         <scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
+         <scope>provided</scope>
 		</dependency>
 
 		<dependency>
