@@ -1,48 +1,48 @@
-/******************************************************************************
- * JBoss, a division of Red Hat                                               *
- * Copyright 2009, Red Hat Middleware, LLC, and individual                    *
- * contributors as indicated by the @authors tag. See the                     *
- * copyright.txt in the distribution for a full listing of                    *
- * individual contributors.                                                   *
- *                                                                            *
- * This is free software; you can redistribute it and/or modify it            *
- * under the terms of the GNU Lesser General Public License as                *
- * published by the Free Software Foundation; either version 2.1 of           *
- * the License, or (at your option) any later version.                        *
- *                                                                            *
- * This software is distributed in the hope that it will be useful,           *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of             *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU           *
- * Lesser General Public License for more details.                            *
- *                                                                            *
- * You should have received a copy of the GNU Lesser General Public           *
- * License along with this software; if not, write to the Free                *
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA         *
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.                   *
- ******************************************************************************/
+/*
+ * JBoss, a division of Red Hat
+ * Copyright 2011, Red Hat Middleware, LLC, and individual
+ * contributors as indicated by the @authors tag. See the
+ * copyright.txt in the distribution for a full listing of
+ * individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 package org.gatein.common.io;
 
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.util.Tools;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.InvocationTargetException;
-import java.io.OutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.ByteArrayOutputStream;
-import java.io.Writer;
-import java.io.Serializable;
-import java.io.ObjectOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ObjectStreamClass;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Serializable;
+import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 /**
  * IO tools.
@@ -63,12 +63,10 @@ public class IOTools
    private static final Class<?>[] EMPTY_PARAMETER_TYPES = new Class[0];
 
    /**
-    * <p>Attempt to close an object. Null argument value is authorized and no operation will be performed in that
-    * use case.</p>
-    *
-    * <p>It will try to obtain a <code>close()</code> method by reflection and it
-    * will be invoked only if the method is public and not static. If the method is called, any <code>Error</code>
-    * or <code>RuntimeException</code> will be rethrown, any other kind of throwable will not be rethrown in any form.</p>
+    * <p>Attempt to close an object. Null argument value is authorized and no operation will be performed in that use
+    * case.</p> <p/> <p>It will try to obtain a <code>close()</code> method by reflection and it will be invoked only if
+    * the method is public and not static. If the method is called, any <code>Error</code> or
+    * <code>RuntimeException</code> will be rethrown, any other kind of throwable will not be rethrown in any form.</p>
     *
     * @param closable the object to close
     */
@@ -122,8 +120,9 @@ public class IOTools
    }
 
    /**
-    * <p>Attempt to close an {@link Closeable} object. Null argument value is authorized and no operation will be performed in that
-    * use case. {@link IOException} thrown are logged using the <code>error</code> level but not propagated.</p>
+    * <p>Attempt to close an {@link Closeable} object. Null argument value is authorized and no operation will be
+    * performed in that use case. {@link IOException} thrown are logged using the <code>error</code> level but not
+    * propagated.</p>
     *
     * @param out the stream to close
     */
@@ -143,11 +142,11 @@ public class IOTools
    }
 
    /**
-    * @see #getBytes(java.io.InputStream, int)
     * @param in the input stream
     * @return the bytes read from the stream
     * @throws java.io.IOException
     * @throws IllegalArgumentException if the input stream is null
+    * @see #getBytes(java.io.InputStream, int)
     */
    public static byte[] getBytes(InputStream in) throws IOException, IllegalArgumentException
    {
@@ -157,7 +156,7 @@ public class IOTools
    /**
     * Get the bytes from the provided input stream. No attempt will be made to close the stream.
     *
-    * @param in the input stream
+    * @param in         the input stream
     * @param bufferSize the buffer size used to copy the bytes
     * @return the bytes read from the stream
     * @throws java.io.IOException
@@ -170,11 +169,36 @@ public class IOTools
       return out.toByteArray();
    }
 
+   public static byte[] safeGetBytes(InputStream is)
+   {
+      byte[] bytes;
+
+      if (is == null)
+      {
+         return null;
+      }
+
+      try
+      {
+         bytes = getBytes(is);
+         return bytes;
+      }
+      catch (IOException ignore)
+      {
+         // todo: should log
+         return null;
+      }
+      finally
+      {
+         IOTools.safeClose(is);
+      }
+   }
+
    /**
-    * @see #copy(java.io.InputStream, java.io.OutputStream, int)
     * @param in  the incoming stream
     * @param out the outcoming stream
     * @throws IllegalArgumentException if an argument is null
+    * @see #copy(java.io.InputStream, java.io.OutputStream, int)
     */
    public static void copy(InputStream in, OutputStream out) throws IOException
    {
@@ -182,8 +206,8 @@ public class IOTools
    }
 
    /**
-    * Pipe an incoming stream in an outcoming stream until no bytes is available from the input stream.
-    * No attempts will be made to close the streams.
+    * Pipe an incoming stream in an outcoming stream until no bytes is available from the input stream. No attempts will
+    * be made to close the streams.
     *
     * @param in         the incoming stream
     * @param out        the outcoming stream
@@ -282,7 +306,7 @@ public class IOTools
     * @param serializable the serializable object to clone
     * @return a clone
     * @throws IllegalArgumentException if the serializable object is null
-    * @throws IOException any IOException
+    * @throws IOException              any IOException
     */
    public static <S extends Serializable> S clone(S serializable) throws IllegalArgumentException, IOException
    {
@@ -297,14 +321,14 @@ public class IOTools
    }
 
    /**
-    * Clone an object implementing the <code>Serializable</code> interface. The specified classloader will be used
-    * to perform the unserialization. If no classloader is specified and the object is not null then the classloader
-    * used is the one returned by <code>serializable.getClass().getClassLoader()</code>.
+    * Clone an object implementing the <code>Serializable</code> interface. The specified classloader will be used to
+    * perform the unserialization. If no classloader is specified and the object is not null then the classloader used
+    * is the one returned by <code>serializable.getClass().getClassLoader()</code>.
     *
     * @param serializable the serializable object to clone
     * @return a clone
     * @throws IllegalArgumentException if the serializable object is null
-    * @throws IOException any IOException
+    * @throws IOException              any IOException
     */
    @SuppressWarnings("unchecked")
    public static <S extends Serializable> S clone(S serializable, ClassLoader classLoader) throws IllegalArgumentException, IOException, ClassNotFoundException
@@ -343,8 +367,8 @@ public class IOTools
     * @param bytes the bytes to unserialize
     * @return the unserialized object
     * @throws IllegalArgumentException if the byte array is null
-    * @throws IOException any IOException
-    * @throws ClassNotFoundException any ClassNotFoundException
+    * @throws IOException              any IOException
+    * @throws ClassNotFoundException   any ClassNotFoundException
     */
    public static Serializable unserialize(byte[] bytes) throws IllegalArgumentException, IOException, ClassNotFoundException
    {
@@ -355,12 +379,12 @@ public class IOTools
     * Unserialize the bytes into an object. If the provided classloader is not null, this classloader is used to perform
     * the unserialization otherwise the thread current context classloader is used.
     *
-    * @param bytes the bytes to unserialize
+    * @param bytes       the bytes to unserialize
     * @param classLoader the classloader
     * @return the unserialized object
     * @throws IllegalArgumentException if the byte array is null
-    * @throws IOException any IOException
-    * @throws ClassNotFoundException any ClassNotFoundException
+    * @throws IOException              any IOException
+    * @throws ClassNotFoundException   any ClassNotFoundException
     */
    public static Serializable unserialize(byte[] bytes, final ClassLoader classLoader) throws IllegalArgumentException, IOException, ClassNotFoundException
    {
@@ -382,7 +406,7 @@ public class IOTools
             else
             {
                String className = desc.getName();
-               
+
                // JDK 6, by default, only supports array types (ex. [[B)  using Class.forName()
                return Class.forName(className, false, classLoader);
             }
@@ -402,7 +426,7 @@ public class IOTools
                {
                   ifaceClasses[i] = classLoader.loadClass(interfaces[i]);
                }
-      
+
                return java.lang.reflect.Proxy.getProxyClass(classLoader, ifaceClasses);
             }
          }
@@ -464,9 +488,10 @@ public class IOTools
    }
 
    /**
-    * Check that the provided input stream is buffered. If the argument is already an instance of <code>BufferedInputStream</code>
-    * no operation will be performed, otherwise a instance of <code>BufferedInputStream</code> will be created and returned.
-    *
+    * Check that the provided input stream is buffered. If the argument is already an instance of
+    * <code>BufferedInputStream</code> no operation will be performed, otherwise a instance of
+    * <code>BufferedInputStream</code> will be created and returned.
+    * <p/>
     * If the provided argument is null, the null value is returned.
     *
     * @param in the stream
@@ -492,9 +517,10 @@ public class IOTools
    }
 
    /**
-    * Check that the provided output stream is buffered. If the argument is already an instance of <code>BufferedOutputStream</code>
-    * no operation will be performed, otherwise a instance of <code>BufferedOutputStream</code> will be created and returned.
-    *
+    * Check that the provided output stream is buffered. If the argument is already an instance of
+    * <code>BufferedOutputStream</code> no operation will be performed, otherwise a instance of
+    * <code>BufferedOutputStream</code> will be created and returned.
+    * <p/>
     * If the provided argument is null, the null value is returned.
     *
     * @param out the stream
