@@ -18,8 +18,6 @@
  */
 package org.gatein.common.concurrent;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 /**
  * An internal class to keep a reference onto another object, it is used in the bounded buffer implementation.
  *
@@ -33,11 +31,11 @@ class ObjectRef<T>
    final T object;
 
    /** . */
-   final AtomicReference<ObjectRef<T>> next;
+   volatile ObjectRef<T> next;
 
    ObjectRef(T object)
    {
       this.object = object;
-      this.next = new AtomicReference<ObjectRef<T>>();
+      this.next = null;
    }
 }

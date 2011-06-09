@@ -60,7 +60,7 @@ public class BoundedBuffer<T> implements Iterable<T>
    private ObjectRef<T> first;
 
    /** The size, it is declared as volatile for the @link{getSize()} method. */
-   private volatile int size;
+   private int size;
 
    public BoundedBuffer(int maxSize)
    {
@@ -79,11 +79,6 @@ public class BoundedBuffer<T> implements Iterable<T>
       return maxSize;
    }
 
-   public int getSize()
-   {
-      return size;
-   }
-
    /**
     * Add an element to the buffer.
     *
@@ -91,26 +86,26 @@ public class BoundedBuffer<T> implements Iterable<T>
     */
    public void add(T t)
    {
+      ObjectRef<T> added = new ObjectRef<T>(t);
       synchronized (this)
       {
          if (first == null)
          {
-            first = new ObjectRef<T>(t);
-            last = first;
+            last = first = added;
             size = 1;
          }
          else
          {
             ObjectRef<T> tmp = first;
-            first = new ObjectRef<T>(t);
-            tmp.next.set(first);
+            first = added;
+            tmp.next = first;
             if (size < maxSize)
             {
                size++;
             }
             else
             {
-               last = last.next.get();
+               last = last.next;
             }
          }
       }
@@ -124,22 +119,20 @@ public class BoundedBuffer<T> implements Iterable<T>
     */
    public Iterator<T> iterator()
    {
+      ObjectRef<T> last;
+      int size;
+      synchronized (this)
+      {
+         last = this.last;
+         size = this.size;
+      }
       if (size == 0)
       {
-         List<T> empty = Collections.emptyList();
-         return empty.iterator();
+         return Collections.<T>emptyList().iterator();
       }
       else
       {
-         // Get consistent state
-         final ObjectRef<T> lastSnapshot;
-         final int sizeSnapshot;
-         synchronized (this)
-         {
-            lastSnapshot = last;
-            sizeSnapshot = size;
-         }
-         return new BoundedIterator<T>(lastSnapshot, sizeSnapshot);
+         return new BoundedIterator<T>(last, size);
       }
    }
 
@@ -171,7 +164,7 @@ public class BoundedBuffer<T> implements Iterable<T>
             throw new NoSuchElementException();
          }
          T next = current.object;
-         current = current.next.get();
+         current = current.next;
          count++;
          return next;
       }
