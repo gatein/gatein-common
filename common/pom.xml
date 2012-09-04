@@ -62,7 +62,6 @@
 					<argLine>-enableassertions</argLine>
 					<excludes>
 						<exclude>org/gatein/common/i18n/BundleNameParserTestCase*.java</exclude>
-						<exclude>org/gatein/common/net/URLNavigatorTestCase.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
