@@ -12,7 +12,7 @@
 
   <groupId>org.gatein.common</groupId>
   <artifactId>common-parent</artifactId>
-  <version>2.1.0.Alpha01-SNAPSHOT</version>
+  <version>2.1.0.Alpha01</version>
   <packaging>pom</packaging>
   
   <scm>
@@ -36,12 +36,12 @@
       <dependency>
         <groupId>org.gatein.common</groupId>
         <artifactId>common-logging</artifactId>
-        <version>2.1.0.Alpha01-SNAPSHOT</version>
+        <version>2.1.0.Alpha01</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.common</groupId>
         <artifactId>common-common</artifactId>
-        <version>2.1.0.Alpha01-SNAPSHOT</version>
+        <version>2.1.0.Alpha01</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
