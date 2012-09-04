@@ -41,7 +41,7 @@ class SLF4JLocationAwareLogger extends Logger
    @Override
    protected void doLog(LogLevel level, Object msg, Throwable throwable)
    {
-      delegate.log(null, FQCN, level.getSLF4Jlevel(), String.valueOf(msg), throwable);
+      delegate.log(null, FQCN, level.getSLF4Jlevel(), String.valueOf(msg), null, throwable);
    }
 
    @Override

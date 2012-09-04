@@ -1,19 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<parent>
+
+  <parent>
 		<groupId>org.gatein.common</groupId>
 		<artifactId>common-parent</artifactId>
-		<version>2.0.5-Beta01-SNAPSHOT</version>
-	</parent>
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>common-common</artifactId>
-	<packaging>jar</packaging>
-	<name>GateIn - Common component (common)</name>
+    <version>2.1.0.Alpha01-SNAPSHOT</version>
+  </parent>
 
-	<dependencies>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>common-common</artifactId>
+  <packaging>jar</packaging>
+  <name>GateIn - Common component (common)</name>
 
-		<dependency>
-			<groupId>org.gatein.common</groupId>
-			<artifactId>common-logging</artifactId>
+  <dependencies>
+
+    <dependency>
+      <groupId>org.gatein.common</groupId>
+      <artifactId>common-logging</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
@@ -21,17 +23,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<scope>test</scope>
-		</dependency>
-
-      <!--
-      Supposedly, when VFSZipURLNavigationProvider is used, it is in a JBoss AS context... This avoids pulling lots of
-      dependencies for just a class that might not even be used. Ideally, VFSZipURLNavigationProvider should be moved
-      to a JBoss AS specific common module?
-      -->
-		<dependency>
-			<groupId>org.jboss</groupId>
-			<artifactId>jboss-vfs</artifactId>
-         <scope>provided</scope>
 		</dependency>
 
 		<dependency>
