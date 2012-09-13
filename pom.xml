@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.gatein</groupId>
     <artifactId>gatein-parent</artifactId>
-    <version>1.2.0.Alpha02</version>
+    <version>1.2.0.Alpha03</version>
   </parent>
 
   <groupId>org.gatein.common</groupId>
@@ -28,7 +28,7 @@
       <dependency>
         <groupId>org.gatein</groupId>
         <artifactId>gatein-dep</artifactId>
-        <version>1.2.0.Alpha01</version>
+        <version>1.2.0.Alpha03</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
