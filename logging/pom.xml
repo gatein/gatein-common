@@ -44,4 +44,27 @@
 
   </dependencies>
 
+  <profiles>
+    <profile>
+      <id>slf-1.5</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>1.5.11</version>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>slf-1.7</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>1.7.0</version>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
+
 </project>

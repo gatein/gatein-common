@@ -18,7 +18,8 @@
  */
 package org.slf4j.impl;
 
-import org.slf4j.helpers.NOPMDCAdapter;
+import junit.framework.AssertionFailedError;
+import org.gatein.common.logging.Logger;
 import org.slf4j.spi.MDCAdapter;
 
 /**
@@ -28,15 +29,50 @@ import org.slf4j.spi.MDCAdapter;
 public class StaticMDCBinder
 {
 
+   /** . */
    public static final StaticMDCBinder SINGLETON = new StaticMDCBinder();
+
+   /** . */
+   private static final Class<? extends MDCAdapter> MDCAdapter_CLASS;
+
+   static
+   {
+      try
+      {
+         switch (Logger.LOGGER)
+         {
+            case Logger.SLF_1_5:
+               MDCAdapter_CLASS = (Class<MDCAdapter>)MDCAdapter.class.getClassLoader().loadClass("org.slf4j.helpers.NOPMakerAdapter");
+               break;
+            case Logger.SLF_1_6:
+               MDCAdapter_CLASS = (Class<MDCAdapter>)MDCAdapter.class.getClassLoader().loadClass("org.slf4j.helpers.NOPMDCAdapter");
+               break;
+            default:
+               throw new Exception("Bad SLF4J");
+         }
+      }
+      catch (Exception e)
+      {
+         throw new AssertionError(e);
+      }
+   }
 
    public MDCAdapter getMDCA()
    {
-      return new NOPMDCAdapter();
+      try
+      {
+         return MDCAdapter_CLASS.newInstance();
+      }
+      catch (Exception e)
+      {
+         AssertionError afe = new AssertionError("Could not instantiate MDCAdapter");
+         afe.initCause(e);
+         throw afe;
+      }
    }
 
    public String getMDCAdapterClassStr()
    {
-      return NOPMDCAdapter.class.getName();
+      return MDCAdapter_CLASS.getName();
    }
 }

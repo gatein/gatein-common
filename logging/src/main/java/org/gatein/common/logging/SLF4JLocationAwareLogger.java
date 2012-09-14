@@ -20,6 +20,9 @@ package org.gatein.common.logging;
 
 import org.slf4j.spi.LocationAwareLogger;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.UndeclaredThrowableException;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -27,7 +30,7 @@ import org.slf4j.spi.LocationAwareLogger;
 class SLF4JLocationAwareLogger extends Logger
 {
 
-   /** . */
+  /** . */
    private static final String FQCN = SLF4JLocationAwareLogger.class.getName();
 
    /** . */
@@ -39,9 +42,44 @@ class SLF4JLocationAwareLogger extends Logger
    }
 
    @Override
-   protected void doLog(LogLevel level, Object msg, Throwable throwable)
+   protected void doLog(LogLevel level, Object msg, Object[] argArray, Throwable throwable)
    {
-      delegate.log(null, FQCN, level.getSLF4Jlevel(), String.valueOf(msg), null, throwable);
+      try
+      {
+         switch (LOGGER)
+         {
+            case SLF_1_5:
+               // 1.5 : log(Marker marker, String fqcn, int level, String message, Throwable t);
+               log.invoke(delegate, FQCN, level.getSLF4Jlevel(), String.valueOf(msg), throwable);
+               break;
+            case SLF_1_6:
+               // 1.6 : log(Marker marker, String fqcn, int level, String message, Object[] argArray, Throwable t);
+               log.invoke(delegate, FQCN, level.getSLF4Jlevel(), String.valueOf(msg), argArray, throwable);
+               break;
+         }
+      }
+      catch (IllegalAccessException e)
+      {
+         AssertionError ae = new AssertionError("Unexpected issue when using SLF4J location aware logger");
+         ae.initCause(e);
+         throw ae;
+      }
+      catch (InvocationTargetException e)
+      {
+         Throwable cause = e.getCause();
+         if (cause instanceof RuntimeException)
+         {
+            throw (RuntimeException)cause;
+         }
+         else if (cause instanceof Error)
+         {
+            throw (Error)cause;
+         }
+         else
+         {
+            throw new UndeclaredThrowableException(cause);
+         }
+      }
    }
 
    @Override

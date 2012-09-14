@@ -34,7 +34,7 @@ class SimpleLogger extends Logger
    }
 
    @Override
-   protected void doLog(LogLevel level, Object msg, Throwable throwable)
+   protected void doLog(LogLevel level, Object msg, Object[] argArray, Throwable throwable)
    {
       level.log(delegate, msg, throwable);
    }

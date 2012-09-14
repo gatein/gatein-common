@@ -18,6 +18,11 @@
  */
 package org.gatein.common.logging;
 
+import org.slf4j.Marker;
+import org.slf4j.spi.LocationAwareLogger;
+
+import java.lang.reflect.Method;
+
 /**
  * The logger for GateIn.
  *
@@ -27,10 +32,57 @@ package org.gatein.common.logging;
 public abstract class Logger
 {
 
+   /** . */
+   public static final int SLF_1_5 = 0;
+
+   /** . */
+   public static final int SLF_1_6 = 1;
+
+   /** . */
+   static Method log;
+
+   /** . */
+   public static final int LOGGER;
+
+   static
+   {
+      Method m = getLogMethod(Marker.class, String.class, int.class, String.class, Throwable.class);
+      if (m != null)
+      {
+         LOGGER = SLF_1_5;
+      }
+      else
+      {
+         m = getLogMethod(Marker.class, String.class, int.class, String.class, Object[].class, Throwable.class);
+         if (m != null)
+         {
+            LOGGER = SLF_1_6;
+         }
+         else
+         {
+            throw new AssertionError("Could not use with the found SLF 4J version " +
+               LocationAwareLogger.class.getProtectionDomain().getCodeSource().getLocation());
+         }
+      }
+      log = m;
+   }
+
+   private static Method getLogMethod(Class... signature)
+   {
+      try
+      {
+         return LocationAwareLogger.class.getMethod("log", signature);
+      }
+      catch (NoSuchMethodException ignore)
+      {
+         return null;
+      }
+   }
+
    /** Helps the compiler to be happy. */
    private static final Object[] NO_PARAMETERS = null;
 
-   protected abstract void doLog(LogLevel level, Object msg, Throwable throwable);
+   protected abstract void doLog(LogLevel level, Object msg, Object[] argArray, Throwable throwable);
 
    protected abstract org.slf4j.Logger getDelegate();
 
@@ -48,7 +100,7 @@ public abstract class Logger
       }
 
       //
-      doLog(level, msg, throwable);
+      doLog(level, msg, parameters, throwable);
    }
 
    public final String getName()
