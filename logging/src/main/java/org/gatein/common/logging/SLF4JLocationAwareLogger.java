@@ -50,11 +50,11 @@ class SLF4JLocationAwareLogger extends Logger
          {
             case SLF_1_5:
                // 1.5 : log(Marker marker, String fqcn, int level, String message, Throwable t);
-               log.invoke(delegate, FQCN, level.getSLF4Jlevel(), String.valueOf(msg), throwable);
+               log.invoke(delegate, null, FQCN, level.getSLF4Jlevel(), String.valueOf(msg), throwable);
                break;
             case SLF_1_6:
                // 1.6 : log(Marker marker, String fqcn, int level, String message, Object[] argArray, Throwable t);
-               log.invoke(delegate, FQCN, level.getSLF4Jlevel(), String.valueOf(msg), argArray, throwable);
+               log.invoke(delegate, null, FQCN, level.getSLF4Jlevel(), String.valueOf(msg), argArray, throwable);
                break;
          }
       }
