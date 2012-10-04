@@ -21,17 +21,16 @@
     <url>https://github.com/gatein/gatein-common</url>
   </scm>
 
+  <properties>
+    <version.org.slf4j>1.6.1</version.org.slf4j>
+    <version.javax.servlet>3.0.1</version.javax.servlet>
+    <version.junit>3.8.2</version.junit>
+  </properties>
+
   
   <!-- Import dependency management configuration -->
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.gatein</groupId>
-        <artifactId>gatein-dep</artifactId>
-        <version>1.2.0.Alpha03</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
 
       <dependency>
         <groupId>org.gatein.common</groupId>
@@ -43,6 +42,30 @@
         <artifactId>common-common</artifactId>
         <version>2.1.0.Alpha05-SNAPSHOT</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${version.org.slf4j}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>${version.org.slf4j}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>${version.javax.servlet}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${version.junit}</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
    
