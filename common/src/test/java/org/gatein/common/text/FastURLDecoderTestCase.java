@@ -151,6 +151,24 @@ public class FastURLDecoderTestCase extends TestCase
    {
       testEncodeMalformedInput(FastURLDecoder.getUTF8StrictInstance(), true);
       testEncodeMalformedInput(FastURLDecoder.getUTF8Instance(), false);
+      testEncodeWrongCharset(FastURLDecoder.getUTF8Instance());
+   }
+
+   private void testEncodeWrongCharset(FastURLDecoder utf8Instance)
+   {
+      try
+      {
+         //This is unicode % character encoding with UTF-16
+         utf8Instance.encode("%fe%ff%00%25");
+         fail("Should throw EncodingException, that characters are not in the UTF-8 unicode table");
+      }
+      catch (EncodingException e)
+      {
+      }
+      
+      //This is % encoding with UTF-8
+      String result = utf8Instance.encode("%00%25");
+      assertNotNull(result);
    }
 
    private void testEncodeMalformedInput(FastURLDecoder encoder, boolean strict)
