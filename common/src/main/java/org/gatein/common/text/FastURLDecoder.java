@@ -212,17 +212,24 @@ public class FastURLDecoder extends AbstractCharEncoder
                   }
 
                   //
-                  LookupNode child = current.children[z];
-                  if (child instanceof LookupTerm)
+                  if (current == null)
                   {
-                     LookupTerm term = (LookupTerm)child;
-                     tmp.append(term.c);
-                     i = j;
-                     break;
+                     throw new MalformedInputException("Cannot decode char '" + c1 + c2 + "'");
                   }
                   else
                   {
-                     current = (LookupNonTerm)child;
+                     LookupNode child = current.children[z];
+                     if (child instanceof LookupTerm)
+                     {
+                        LookupTerm term = (LookupTerm)child;
+                        tmp.append(term.c);
+                        i = j;
+                        break;
+                     }
+                     else
+                     {
+                        current = (LookupNonTerm)child;
+                     }
                   }
 
                   //
