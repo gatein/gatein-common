@@ -113,7 +113,7 @@ public final class ParameterMap extends AbstractTypedMap<String, String[], Strin
    }
 
    /** . */
-   private AccessMode accessMode;
+   private transient AccessMode accessMode;
 
    /** . */
    private Map<String, String[]> delegate;
@@ -316,6 +316,7 @@ public final class ParameterMap extends AbstractTypedMap<String, String[], Strin
 
    private void writeObject(java.io.ObjectOutputStream out) throws IOException
    {
+      out.defaultWriteObject();
       out.writeBoolean(accessMode.copyValueOnRead);
       out.writeBoolean(accessMode.copyValueOnWrite);
       out.writeObject(delegate);
@@ -324,6 +325,7 @@ public final class ParameterMap extends AbstractTypedMap<String, String[], Strin
    @SuppressWarnings("unchecked")
    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException
    {
+      in.defaultReadObject();
       boolean copyValueOnRead = in.readBoolean();
       boolean copyValueOnWrite = in.readBoolean();
 
