@@ -28,13 +28,21 @@ import org.gatein.common.util.Tools;
 import org.gatein.common.ExtendedAssert;
 import org.gatein.common.io.IOTools;
 
+import org.jboss.marshalling.Marshaller;
+import org.jboss.marshalling.MarshallerFactory;
+import org.jboss.marshalling.Marshalling;
+import org.jboss.marshalling.MarshallingConfiguration;
+import org.jboss.marshalling.Unmarshaller;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.List;
-import java.io.IOException;
 
 /**
  * @author <a href="mailto:julien@jboss.org">Julien Viet</a>
@@ -509,6 +517,50 @@ public class ParameterMapTestCase extends TestCase
       checkSerializable(p1);
       checkSerializable(p2);
       checkSerializable(p3);
+   }
+
+   private void checkSerializableJBossMarshalling(ParameterMap parameters) throws IOException, ClassNotFoundException
+   {
+      byte[] bytes = null;
+
+      // Get the factory for the "river" marshalling protocol
+      final MarshallerFactory marshallerFactory = Marshalling.getProvidedMarshallerFactory("river");
+
+      // Create a configuration
+      final MarshallingConfiguration configuration = new MarshallingConfiguration();
+      // Use version 3
+      configuration.setVersion(3);
+
+      // write object to byte array stream
+      final Marshaller marshaller = marshallerFactory.createMarshaller(configuration);
+      final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      marshaller.start(Marshalling.createByteOutput(baos));
+      marshaller.writeObject(parameters);
+      marshaller.finish();
+      bytes = baos.toByteArray();
+
+      final Unmarshaller unmarshaller = marshallerFactory.createUnmarshaller(configuration);
+      final ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+      unmarshaller.start(Marshalling.createByteInput(bais));
+
+      ParameterMap copy = (ParameterMap)unmarshaller.readObject();
+      unmarshaller.finish();
+      assertTrue(copy.equals(parameters));
+   }
+
+   public void testSerializableJBossMarshalling() throws IOException, ClassNotFoundException
+   {
+      ParameterMap p1 = new ParameterMap();
+      ParameterMap p2 = new ParameterMap();
+      p2.setValues("foo", new String[]{"foo1"});
+      ParameterMap p3 = new ParameterMap();
+      p3.setValues("foo", new String[]{"foo1"});
+      p3.setValues("bar", new String[]{"bar1","bar2"});
+
+      //
+      checkSerializableJBossMarshalling(p1);
+      checkSerializableJBossMarshalling(p2);
+      checkSerializableJBossMarshalling(p3);
    }
 
    public Class[] buildExceptionClasses()
