@@ -24,6 +24,9 @@ package org.gatein.common.text;
 
 import org.gatein.common.util.ParameterValidation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This encoder performs lookup for converting a char to its HTML entity representation.
  *
@@ -37,7 +40,7 @@ public class EntityEncoder extends AbstractCharEncoder
    {
       ParameterValidation.throwIllegalArgExceptionIfNull(writer, "CharWriter");
 
-      String s = charToEntity[c];
+      String s = lookup(c);
 
       //
       if (s != null)
@@ -103,8 +106,11 @@ public class EntityEncoder extends AbstractCharEncoder
       }
    }
 
-   /** . */
-   private String[] charToEntity = new String[65536];
+   // this uses two hashmaps, which would be similar to the approach with the BidiMap from commons-collections
+   // but we don't need to introduce the depedency there. The disadvantage is that we have two maps, but we need
+   // to do a reverse lookup, so, it's a small price to pay, as this hash is quite small (255 when this was introduced)
+   private Map<Character, String> charMap = new HashMap<Character, String>(255);
+   private Map<String, Character> inverseCharMap = new HashMap<String, Character>(255);
 
    protected EntityEncoder()
    {
@@ -364,12 +370,14 @@ public class EntityEncoder extends AbstractCharEncoder
 
    protected final void put(int c, String entity)
    {
-      charToEntity[c] = entity;
+      charMap.put((char) c, entity);
+      inverseCharMap.put(entity, (char) c);
    }
 
    protected final void remove(int c)
    {
-      charToEntity[c] = null;
+      inverseCharMap.remove(charMap.get((char) c));
+      charMap.remove((char) c);
    }
 
    /**
@@ -380,6 +388,17 @@ public class EntityEncoder extends AbstractCharEncoder
     */
    public final String lookup(char c)
    {
-      return charToEntity[c];
+      return charMap.get(c);
+   }
+
+   /**
+    * Returns the char related to the provided string. For instance, ccedil as input returns ç (int 231).
+    * @param s the string to be reversed into the character
+    * @return the int code for the given string or -1, if it wasn't found
+    */
+   public final int reverse(String s)
+   {
+      Character c = inverseCharMap.get(s);
+      return c == null ? -1 : c;
    }
 }

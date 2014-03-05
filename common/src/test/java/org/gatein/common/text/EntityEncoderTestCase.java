@@ -49,6 +49,11 @@ public class EntityEncoderTestCase extends TestCase
       assertEquals("&amp;bar", buffer.asString(true));
    }
 
+   public void testReverse()
+   {
+       assertEquals((char) 231, EntityEncoder.FULL.reverse("ccedil"));
+   }
+
    public void testString()
    {
       test("&amp;", "&");
